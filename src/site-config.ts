@@ -9,7 +9,6 @@ export const siteConfig = {
   name: 'Found',
   description: 'A private, local-first library for things worth finding again.',
   canonicalUrl: 'https://keep-it-found.app/',
-  repositoryUrl: 'https://github.com/adityabhattad2021/keep-it-found-web',
   issueUrl: 'https://github.com/adityabhattad2021/keep-it-found-web/issues/new/choose',
   supportEmail: 'adityabhattad18@gmail.com',
   releases: {

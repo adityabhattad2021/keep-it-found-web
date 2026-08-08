@@ -86,10 +86,9 @@ function SiteFooter({ page }: Readonly<{ page: SiteShellProps['page'] }>) {
             <p>Help</p>
             <a aria-current={page === 'support' ? 'page' : undefined} href={sitePath('support/')}>Support</a>
             <a aria-current={page === 'privacy' ? 'page' : undefined} href={sitePath('privacy/')}>Privacy</a>
-            <a href={siteConfig.repositoryUrl} rel="noreferrer" target="_blank">Source code</a>
           </nav>
         </div>
-        <p className="site-footer__note">Local first. Built in the open.</p>
+        <p className="site-footer__note">Local first. Shaped by real use.</p>
       </div>
     </footer>
   )
