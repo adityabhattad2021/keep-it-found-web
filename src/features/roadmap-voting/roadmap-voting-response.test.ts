@@ -3,38 +3,37 @@ import test from 'node:test'
 
 import { parsePickResult, parsePickSnapshot } from './roadmap-voting-response.ts'
 
-test('pick snapshots accept known counts and up to three unique picks', () => {
+test('pick snapshots accept known counts and up to two unique picks', () => {
   assert.deepEqual(parsePickSnapshot({
-    counts: { 'found-can-act': 4 },
-    pickedFeatureIds: ['found-can-act'],
+    counts: { 'found-outside-found': 4 },
+    pickedFeatureIds: ['found-outside-found'],
   }), {
-    counts: { 'found-can-act': 4 },
-    pickedFeatureIds: ['found-can-act'],
+    counts: { 'found-outside-found': 4 },
+    pickedFeatureIds: ['found-outside-found'],
   })
 })
 
 test('pick snapshots reject malformed, unknown, duplicate, and excessive picks', () => {
-  assert.throws(() => parsePickSnapshot({ counts: { 'found-can-act': -1 }, pickedFeatureIds: [] }))
+  assert.throws(() => parsePickSnapshot({ counts: { 'found-outside-found': -1 }, pickedFeatureIds: [] }))
   assert.throws(() => parsePickSnapshot({ counts: { unknown: 1 }, pickedFeatureIds: [] }))
-  assert.throws(() => parsePickSnapshot({ counts: {}, pickedFeatureIds: ['found-can-act', 'found-can-act'] }))
+  assert.throws(() => parsePickSnapshot({ counts: {}, pickedFeatureIds: ['found-outside-found', 'found-outside-found'] }))
   assert.throws(() => parsePickSnapshot({
     counts: {},
     pickedFeatureIds: [
-      'found-can-act',
-      'intelligent-retrieval',
-      'open-automation',
-      'personal-adaptation',
+      'found-outside-found',
+      'reusable-kits',
+      'active-library',
     ],
   }))
 })
 
 test('pick results validate changed counts and the authoritative selection', () => {
   assert.deepEqual(parsePickResult({
-    counts: { 'found-can-act': 2, 'intelligent-retrieval': 7 },
-    pickedFeatureIds: ['found-can-act'],
+    counts: { 'found-outside-found': 2, 'reusable-kits': 7 },
+    pickedFeatureIds: ['found-outside-found'],
   }), {
-    counts: { 'found-can-act': 2, 'intelligent-retrieval': 7 },
-    pickedFeatureIds: ['found-can-act'],
+    counts: { 'found-outside-found': 2, 'reusable-kits': 7 },
+    pickedFeatureIds: ['found-outside-found'],
   })
-  assert.throws(() => parsePickResult({ counts: { 'found-can-act': 1.5 }, pickedFeatureIds: [] }))
+  assert.throws(() => parsePickResult({ counts: { 'found-outside-found': 1.5 }, pickedFeatureIds: [] }))
 })

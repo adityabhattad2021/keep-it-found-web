@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 
 import { roadmapPickLimit } from '../../roadmap/roadmap-content.ts'
 import type { RoadmapPickChange } from './roadmap-pick-change.ts'
@@ -12,6 +12,7 @@ type RoadmapPickControlProps = Readonly<{
   availability: 'loading' | 'ready' | 'degraded' | 'unavailable'
   count: number
   featureId: string
+  featureTitle: string
   onFeedback(featureId: string, message: string): Promise<void>
   onUpdatePick(change: RoadmapPickChange): Promise<unknown>
   pickedFeatureIds: readonly string[]
@@ -22,12 +23,17 @@ export function RoadmapPickControl({
   availability,
   count,
   featureId,
+  featureTitle,
   onFeedback,
   onUpdatePick,
   pickedFeatureIds,
   replacementOptions,
 }: RoadmapPickControlProps) {
   const feedbackId = useId()
+  const feedbackPanelId = useId()
+  const replacementId = useId()
+  const feedbackRef = useRef<HTMLTextAreaElement>(null)
+  const replacementRef = useRef<HTMLButtonElement>(null)
   const picked = pickedFeatureIds.includes(featureId)
   const [feedback, setFeedback] = useState('')
   const [feedbackOpen, setFeedbackOpen] = useState(false)
@@ -35,6 +41,14 @@ export function RoadmapPickControl({
   const [pickState, setPickState] = useState<'idle' | 'saving' | 'error'>('idle')
   const [replacementOpen, setReplacementOpen] = useState(false)
   const disabled = availability !== 'ready' || pickState === 'saving'
+
+  useEffect(() => {
+    if (feedbackOpen) feedbackRef.current?.focus()
+  }, [feedbackOpen])
+
+  useEffect(() => {
+    if (replacementOpen) replacementRef.current?.focus()
+  }, [replacementOpen])
 
   const resetFeedback = () => {
     setFeedback('')
@@ -90,6 +104,9 @@ export function RoadmapPickControl({
     <div className="roadmap-pick">
       <div className="roadmap-pick__primary">
         <button
+          aria-controls={replacementId}
+          aria-expanded={replacementOpen}
+          aria-label={pickButtonAccessibleLabel(availability, pickState, picked, featureTitle)}
           aria-pressed={picked}
           className="roadmap-pick__button press-surface press-surface--raised"
           disabled={disabled}
@@ -98,16 +115,22 @@ export function RoadmapPickControl({
         >
           {pickButtonLabel(availability, pickState, picked)}
         </button>
-        <p aria-live="polite">{pickCountLabel(count, picked)}</p>
+        <p aria-live="polite">{pickCountLabel(availability, count, picked)}</p>
       </div>
 
       {pickState === 'error' && <p className="roadmap-pick__error" role="alert">Couldn’t update your picks. Try again.</p>}
 
       {replacementOpen && !picked && (
-        <div className="roadmap-replacement" role="group" aria-label="Choose a pick to replace">
-          <p>Your three picks are used. Replace one:</p>
-          {replacementOptions.map((option) => (
-            <button disabled={pickState === 'saving'} key={option.featureId} onClick={() => handleReplacement(option.featureId)} type="button">
+        <div className="roadmap-replacement" id={replacementId} role="group" aria-label="Choose a pick to replace">
+          <p>Your two picks are used. Replace one:</p>
+          {replacementOptions.map((option, index) => (
+            <button
+              disabled={pickState === 'saving'}
+              key={option.featureId}
+              onClick={() => handleReplacement(option.featureId)}
+              ref={index === 0 ? replacementRef : undefined}
+              type="button"
+            >
               {option.title}
             </button>
           ))}
@@ -116,17 +139,18 @@ export function RoadmapPickControl({
       )}
 
       {picked && feedbackState !== 'sent' && !feedbackOpen && (
-        <button className="roadmap-pick__context" onClick={() => setFeedbackOpen(true)} type="button">TELL ME WHY →</button>
+        <button aria-controls={feedbackPanelId} aria-expanded={feedbackOpen} className="roadmap-pick__context" onClick={() => setFeedbackOpen(true)} type="button">TELL ME WHY →</button>
       )}
 
       {picked && feedbackOpen && feedbackState !== 'sent' && (
-        <div className="roadmap-feedback">
+        <div className="roadmap-feedback" id={feedbackPanelId}>
           <label htmlFor={feedbackId}>What would this help you do? <span>Optional</span></label>
           <textarea
             id={feedbackId}
             maxLength={500}
             onChange={(event) => setFeedback(event.target.value)}
             placeholder="Share the real moment. Don’t include private library content."
+            ref={feedbackRef}
             rows={3}
             value={feedback}
           />
@@ -151,14 +175,27 @@ function pickButtonLabel(
   picked: boolean,
 ) {
   if (availability === 'unavailable') return 'PICKS UNAVAILABLE'
-  if (availability === 'degraded') return 'RELOAD TO PICK'
-  if (availability === 'loading') return 'CHECKING PICKS…'
-  if (pickState === 'saving') return 'MOVING…'
-  return picked ? 'YOUR PICK ↑' : 'PUSH THIS ↑'
+  if (availability === 'degraded') return 'PICKS COULD NOT LOAD'
+  if (availability === 'loading') return 'LOADING PICKS…'
+  if (pickState === 'saving') return 'SAVING…'
+  return picked ? 'CHOSEN ✓' : 'CHOOSE THIS'
 }
 
-function pickCountLabel(count: number, picked: boolean) {
+function pickButtonAccessibleLabel(
+  availability: RoadmapPickControlProps['availability'],
+  pickState: 'idle' | 'saving' | 'error',
+  picked: boolean,
+  featureTitle: string,
+) {
+  if (availability !== 'ready') return `${pickButtonLabel(availability, pickState, picked)} for ${featureTitle}`
+  if (pickState === 'saving') return `Saving roadmap pick for ${featureTitle}`
+  return picked ? `Remove ${featureTitle} from your roadmap picks` : `Choose ${featureTitle} for your roadmap picks`
+}
+
+function pickCountLabel(availability: RoadmapPickControlProps['availability'], count: number, picked: boolean) {
+  if (availability === 'loading') return 'LOADING TOTAL'
+  if (availability !== 'ready') return 'TOTAL UNAVAILABLE'
   if (count === 0) return 'NO PICKS YET'
-  if (picked) return count === 1 ? 'YOUR PICK' : `YOU + ${count - 1}`
-  return count === 1 ? '1 PICK' : `${count} PICKS`
+  if (picked) return count === 1 ? 'YOU CHOSE THIS' : `YOU + ${count - 1} OTHERS`
+  return count === 1 ? '1 PERSON CHOSE THIS' : `${count} PEOPLE CHOSE THIS`
 }

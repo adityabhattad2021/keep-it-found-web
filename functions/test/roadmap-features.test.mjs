@@ -8,8 +8,14 @@ import {
   planRoadmapPickUpdate,
   readVoteCount,
   roadmapPickLimit,
+  roadmapRoundId,
   votableRoadmapFeatureIds,
 } from '../lib/roadmap-features.js'
+
+test('the active roadmap round allows exactly two picks per identity', () => {
+  assert.equal(roadmapRoundId, 'reuse-v2')
+  assert.equal(roadmapPickLimit, 2)
+})
 
 test('roadmap feature ids are unique and accepted', () => {
   assert.equal(new Set(votableRoadmapFeatureIds).size, votableRoadmapFeatureIds.length)
@@ -21,7 +27,7 @@ test('unknown roadmap feature ids are rejected', () => {
   assert.throws(() => parseFeatureId(null))
 })
 
-test('roadmap picks are unique, known, and limited to three', () => {
+test('roadmap picks are unique, known, and limited to the active round limit', () => {
   const valid = votableRoadmapFeatureIds.slice(0, roadmapPickLimit)
   assert.deepEqual(parseFeatureIds(valid), valid)
   assert.throws(() => parseFeatureIds([...valid, votableRoadmapFeatureIds[roadmapPickLimit]]))
@@ -30,7 +36,7 @@ test('roadmap picks are unique, known, and limited to three', () => {
 })
 
 test('pick transitions identify exact add, remove, replace, and no-op changes', () => {
-  const [first, second, third, fourth] = votableRoadmapFeatureIds
+  const [first, second, third] = votableRoadmapFeatureIds
   assert.deepEqual(planRoadmapPickUpdate([], [first]), {
     addedFeatureIds: [first],
     removedFeatureIds: [],
@@ -39,8 +45,8 @@ test('pick transitions identify exact add, remove, replace, and no-op changes', 
     addedFeatureIds: [],
     removedFeatureIds: [second],
   })
-  assert.deepEqual(planRoadmapPickUpdate([first, second, third], [first, fourth, third]), {
-    addedFeatureIds: [fourth],
+  assert.deepEqual(planRoadmapPickUpdate([first, second], [first, third]), {
+    addedFeatureIds: [third],
     removedFeatureIds: [second],
   })
   assert.deepEqual(planRoadmapPickUpdate([first], [first]), {

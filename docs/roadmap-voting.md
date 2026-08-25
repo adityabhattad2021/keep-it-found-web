@@ -1,6 +1,6 @@
 # Roadmap voting
 
-The public roadmap is static website content. Firebase stores only three anonymous priorities per
+The public roadmap is static website content. Firebase stores only two anonymous priorities per
 browser identity, aggregate counts, and optional private context submitted after a pick.
 
 ```text
@@ -12,11 +12,12 @@ counts and the current anonymous identity's picks. `setRoadmapPicks` receives th
 pick set and applies every add, removal, or replacement in one transaction. Removing a pick also
 deletes its optional response.
 
-Firestore keeps three private collections:
+Firestore keeps each voting round under `roadmapRounds/{roundId}` so a new roadmap does not reuse
+identities, counts, or feedback from an older set of choices. The active `reuse-v2` round contains:
 
-- `roadmapFeatures/{featureId}` stores the aggregate count.
-- `roadmapVoters/{anonymousUid}` stores at most three selected feature identifiers.
-- `roadmapFeedback/{featureId}_{anonymousUid}` stores optional private context.
+- `roadmapRounds/reuse-v2/features/{featureId}` stores the aggregate count.
+- `roadmapRounds/reuse-v2/voters/{anonymousUid}` stores at most two selected feature identifiers.
+- `roadmapRounds/reuse-v2/feedback/{featureId}_{anonymousUid}` stores optional private context.
 
 ## Firebase console setup
 
@@ -59,6 +60,11 @@ The repository intentionally does not commit `.firebaserc`; every deployment nam
 project explicitly. The Firestore rules deny all browser access because Cloud Functions use the
 Admin SDK.
 
+Deploy and verify this backend before publishing a website build that contains a new round ID,
+feature allowlist, or pick limit. An older function will correctly reject feature identifiers it
+does not know, so publishing the website first would make voting unavailable until the backend is
+updated.
+
 ## Configure GitHub Pages
 
 Create these GitHub Actions repository variables:
@@ -76,10 +82,11 @@ the boundary. The Pages workflow checks that every value exists before creating 
 
 ## Data and limits
 
-- A visitor can keep at most three picks per persistent anonymous browser identity.
+- A visitor can keep at most two picks per persistent anonymous browser identity.
 - Replacing picks updates both aggregate counts atomically. Removed picks also remove their context.
 - Clearing site data can create another identity; picks are product signals, not an election.
 - Written context is limited to 500 characters, remains private, and is accepted only for a current pick.
 - Roadmap ordering is editorial and never changes automatically from pick totals.
-- Feature identifiers are duplicated at the two deployment boundaries intentionally. A repository contract
-  test fails when the website and function allowlists diverge.
+- The round ID, pick limit, and feature identifiers are duplicated at the two deployment boundaries
+  intentionally. A repository contract test fails when the website and function contracts diverge,
+  while the function test independently locks the active product limit to two.

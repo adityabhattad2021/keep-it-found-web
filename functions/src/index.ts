@@ -9,6 +9,7 @@ import {
   parseFeedbackMessage,
   planRoadmapPickUpdate,
   readVoteCount,
+  roadmapRoundId,
   votableRoadmapFeatureIds,
 } from './roadmap-features.js'
 
@@ -16,9 +17,10 @@ initializeApp()
 setGlobalOptions({ maxInstances: 3, region: 'us-central1' })
 
 const db = getFirestore()
-const features = db.collection('roadmapFeatures')
-const feedback = db.collection('roadmapFeedback')
-const voters = db.collection('roadmapVoters')
+const roadmapRound = db.collection('roadmapRounds').doc(roadmapRoundId)
+const features = roadmapRound.collection('features')
+const feedback = roadmapRound.collection('feedback')
+const voters = roadmapRound.collection('voters')
 
 export const getRoadmapVotes = onCall({ enforceAppCheck: true }, async (request) => {
   const featureRefs = votableRoadmapFeatureIds.map((featureId) => features.doc(featureId))
