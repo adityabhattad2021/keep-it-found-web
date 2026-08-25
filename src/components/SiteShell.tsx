@@ -1,18 +1,16 @@
 import { useRef } from 'react'
 import type { ReactNode } from 'react'
 
-import { siteConfig, sitePath } from '../site-config'
+import { sitePath } from '../site-config'
 
 type SiteShellProps = Readonly<{
   children: ReactNode
-  page: 'home' | 'privacy' | 'roadmap' | 'support'
+  page: 'get' | 'home' | 'journal' | 'privacy' | 'roadmap' | 'support'
 }>
 
 export function SiteShell({ children, page }: SiteShellProps) {
   const mobileNavigationRef = useRef<HTMLDetailsElement>(null)
-  const getFoundHref = siteConfig.releases.android.href
-    ?? (page === 'home' ? '#get-found' : sitePath('#get-found'))
-  const getFoundIsExternal = Boolean(siteConfig.releases.android.href && siteConfig.releases.android.external)
+  const getFoundHref = sitePath('get/')
   const closeMobileNavigation = () => mobileNavigationRef.current?.removeAttribute('open')
 
   return (
@@ -25,13 +23,14 @@ export function SiteShell({ children, page }: SiteShellProps) {
             <span>Found</span>
           </a>
           <nav className="desktop-nav" aria-label="Primary navigation">
+            <a aria-current={page === 'home' ? 'page' : undefined} href={sitePath()}>Product</a>
             <a aria-current={page === 'roadmap' ? 'page' : undefined} href={sitePath('roadmap/')}>Roadmap</a>
+            <a aria-current={page === 'journal' ? 'page' : undefined} href={sitePath('journal/')}>Journal</a>
             <a aria-current={page === 'support' ? 'page' : undefined} href={sitePath('support/')}>Support</a>
             <a
               className="header-cta press-surface press-surface--raised"
               href={getFoundHref}
-              rel={getFoundIsExternal ? 'noreferrer' : undefined}
-              target={getFoundIsExternal ? '_blank' : undefined}
+              aria-current={page === 'get' ? 'page' : undefined}
             >
               Get Found
             </a>
@@ -41,8 +40,9 @@ export function SiteShell({ children, page }: SiteShellProps) {
             <nav aria-label="Mobile navigation">
               <div className="mobile-nav__group">
                 <p>Explore</p>
-                <a href={sitePath('#features')} onClick={closeMobileNavigation}>Features</a>
+                <a aria-current={page === 'home' ? 'page' : undefined} href={sitePath()} onClick={closeMobileNavigation}>Product</a>
                 <a aria-current={page === 'roadmap' ? 'page' : undefined} href={sitePath('roadmap/')} onClick={closeMobileNavigation}>Roadmap</a>
+                <a aria-current={page === 'journal' ? 'page' : undefined} href={sitePath('journal/')} onClick={closeMobileNavigation}>Journal</a>
               </div>
               <div className="mobile-nav__group">
                 <p>Help</p>
@@ -53,8 +53,7 @@ export function SiteShell({ children, page }: SiteShellProps) {
                 className="mobile-nav__cta press-surface press-surface--raised"
                 href={getFoundHref}
                 onClick={closeMobileNavigation}
-                rel={getFoundIsExternal ? 'noreferrer' : undefined}
-                target={getFoundIsExternal ? '_blank' : undefined}
+                aria-current={page === 'get' ? 'page' : undefined}
               >
                 Get Found
               </a>
@@ -62,7 +61,7 @@ export function SiteShell({ children, page }: SiteShellProps) {
           </details>
         </div>
       </header>
-      <div id="main-content">{children}</div>
+      <div id="main-content" tabIndex={-1}>{children}</div>
       <SiteFooter page={page} />
     </>
   )
@@ -79,8 +78,9 @@ function SiteFooter({ page }: Readonly<{ page: SiteShellProps['page'] }>) {
         <div className="site-footer__links">
           <nav aria-label="Explore Found">
             <p>Explore</p>
-            <a href={sitePath('#features')}>Features</a>
+            <a aria-current={page === 'home' ? 'page' : undefined} href={sitePath()}>Product</a>
             <a aria-current={page === 'roadmap' ? 'page' : undefined} href={sitePath('roadmap/')}>Roadmap</a>
+            <a aria-current={page === 'journal' ? 'page' : undefined} href={sitePath('journal/')}>Journal</a>
           </nav>
           <nav aria-label="Found help and information">
             <p>Help</p>
@@ -88,7 +88,7 @@ function SiteFooter({ page }: Readonly<{ page: SiteShellProps['page'] }>) {
             <a aria-current={page === 'privacy' ? 'page' : undefined} href={sitePath('privacy/')}>Privacy</a>
           </nav>
         </div>
-        <p className="site-footer__note">Local first. Shaped by real use.</p>
+        <p className="site-footer__note">Made independently.<br />Shaped by real use.</p>
       </div>
     </footer>
   )

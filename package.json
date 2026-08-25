@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && vite build --ssr src/journal-server.tsx --outDir .journal-ssr && node scripts/generate-journal-pages.mjs",
     "check": "npm run test && npm run lint && npm run build",
     "check:voting-config": "node scripts/check-roadmap-config.mjs",
     "lint": "eslint .",
@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "firebase": "^12.17.1",
+    "marked": "^13.0.3",
     "motion": "^13.0.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
@@ -27,6 +28,7 @@
     "eslint": "^10.8.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
+    "firebase-tools": "^15.26.0",
     "globals": "^17.7.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.65.0",

@@ -1,14 +1,14 @@
 import { SiteShell } from '../components/SiteShell'
-import { siteConfig } from '../site-config'
+import { siteConfig, sitePath } from '../site-config'
 
 export function SupportPage() {
   return (
     <SiteShell page="support">
       <main className="support-page">
-        <header className="document-hero content-width">
+        <header className="document-hero page-hero content-width">
           <p className="eyebrow">SUPPORT</p>
           <h1>Let’s get it found.</h1>
-          <p>Beta access, backups, and problems with your library. Start with the shortest route below.</p>
+          <p className="page-hero__lede">Testing access, backups, and problems with your library. Start with the shortest route below.</p>
         </header>
 
         <section className="support-routes" aria-label="Support options">
@@ -20,11 +20,11 @@ export function SupportPage() {
             action="OPEN GITHUB ISSUE"
           />
           <SupportRoute
-            label="ANDROID BETA"
-            title="Waiting for access"
-            copy="Beta invitations are added in batches. Use the same Google account that is active in Play Store."
-            action={siteConfig.releases.android.href ? 'OPEN BETA FORM' : 'FORM OPENING SOON'}
-            href={siteConfig.releases.android.href}
+            label="ANDROID CLOSED TEST"
+            title="Join closed testing"
+            copy="Join the tester group, then opt in through Google Play using the same Google account."
+            action="OPEN TEST ACCESS"
+            href={sitePath('get/?platform=android')}
           />
           <SupportRoute
             label="PRIVATE SUPPORT"
@@ -43,9 +43,10 @@ export function SupportPage() {
           <div className="faq-list">
             <details><summary>Where is my library stored?</summary><p>Canonical library data stays in Found's private storage on your device. Found currently has no account or Found-operated sync service.</p></details>
             <details><summary>Can I take my data out?</summary><p>Yes. Settings can create a validated, human-readable Found backup. Current backups are not encrypted, so handle the ZIP carefully.</p></details>
-            <details><summary>How do Android beta invitations work?</summary><p>Submit the Google account used by Play Store. After it is added to the closed-test list, you receive a Play opt-in link. Remain enrolled for the requested test period and use Found naturally.</p></details>
-            <details><summary>What should a useful bug report include?</summary><p>App version, device model, Android version, the screen involved, what you expected, and what happened. Never attach private library content unless support explicitly requests and explains why it is needed.</p></details>
-            <details><summary>Is iOS available?</summary><p>iPhone and iPad support is being qualified. The iOS action on the homepage will become active only when a real TestFlight build is ready.</p></details>
+            <details><summary>How does Android closed testing work?</summary><p>Join Found's public tester group, then use the same Google account to opt in on Google Play. Group owners and managers can see the Google account email you join with. Found does not use the group for marketing or conversations.</p></details>
+            <details><summary>Why does Google Play say &quot;App not available&quot;?</summary><p>Confirm that Google Groups and Google Play use the same account and that the tester group appears under My groups. Access changes can take a few minutes to reach Google Play, so retry the testing link after a short wait.</p></details>
+            <details><summary>What should a useful bug report include?</summary><p>App version, device model, operating-system version, the screen involved, what you expected, and what happened. Never attach private library content unless support explicitly requests and explains why it is needed.</p></details>
+            <details><summary>Is iOS available?</summary><p>The Get Found page always shows the current TestFlight access status.</p></details>
           </div>
         </section>
       </main>
@@ -60,7 +61,7 @@ function SupportRoute({ action, copy, href, label, title }: Readonly<{
   label: string
   title: string
 }>) {
-  const external = href && !href.startsWith('mailto:')
+  const external = href && /^https?:/.test(href)
   const actionNode = href
     ? <a href={href} rel={external ? 'noreferrer' : undefined} target={external ? '_blank' : undefined}>{action}<span aria-hidden="true">→</span></a>
     : <span aria-disabled="true">{action}</span>

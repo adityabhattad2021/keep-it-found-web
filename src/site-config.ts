@@ -1,8 +1,16 @@
-export type PlatformRelease = Readonly<{
-  label: string
-  detail: string
-  href?: string
-  external?: boolean
+export type AndroidRelease =
+  | Readonly<{ mode: 'closed-test'; groupUrl: string; storeUrl: string }>
+  | Readonly<{ mode: 'paused' }>
+  | Readonly<{ mode: 'production'; storeUrl: string }>
+
+export type IosRelease =
+  | Readonly<{ mode: 'production'; storeUrl: string }>
+  | Readonly<{ mode: 'reviewing'; testFlightUrl: string }>
+  | Readonly<{ mode: 'testflight'; testFlightUrl: string }>
+
+export type PlatformReleases = Readonly<{
+  android: AndroidRelease
+  ios: IosRelease
 }>
 
 export const siteConfig = {
@@ -13,18 +21,15 @@ export const siteConfig = {
   supportEmail: 'adityabhattad18@gmail.com',
   releases: {
     android: {
-      label: 'Android beta opening soon',
-      detail: 'Closed testing',
-      href: undefined,
-      external: true,
+      mode: 'closed-test',
+      groupUrl: 'https://groups.google.com/g/found-android-beta/about',
+      storeUrl: 'https://play.google.com/apps/testing/com.keepitfound.app',
     },
     ios: {
-      label: 'iOS coming next',
-      detail: 'TestFlight',
-      href: undefined,
-      external: true,
+      mode: 'reviewing',
+      testFlightUrl: 'https://testflight.apple.com/join/dTgeP31u',
     },
-  } satisfies Record<'android' | 'ios', PlatformRelease>,
+  } satisfies PlatformReleases,
 } as const
 
 export function sitePath(path = ''): string {
