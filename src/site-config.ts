@@ -26,7 +26,7 @@ export const siteConfig = {
       storeUrl: 'https://play.google.com/apps/testing/com.keepitfound.app',
     },
     ios: {
-      mode: 'reviewing',
+      mode: 'testflight',
       testFlightUrl: 'https://testflight.apple.com/join/dTgeP31u',
     },
   } satisfies PlatformReleases,

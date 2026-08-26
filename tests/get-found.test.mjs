@@ -46,6 +46,6 @@ test('testing links use the intended Google and Apple destinations', () => {
   assert.equal(siteConfig.releases.android.mode, 'closed-test')
   assert.equal(siteConfig.releases.android.groupUrl, 'https://groups.google.com/g/found-android-beta/about')
   assert.equal(siteConfig.releases.android.storeUrl, 'https://play.google.com/apps/testing/com.keepitfound.app')
-  assert.equal(siteConfig.releases.ios.mode, 'reviewing')
+  assert.equal(siteConfig.releases.ios.mode, 'testflight')
   assert.equal(siteConfig.releases.ios.testFlightUrl, 'https://testflight.apple.com/join/dTgeP31u')
 })
