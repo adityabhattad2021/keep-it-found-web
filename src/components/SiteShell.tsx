@@ -5,7 +5,7 @@ import { sitePath } from '../site-config'
 
 type SiteShellProps = Readonly<{
   children: ReactNode
-  page: 'get' | 'home' | 'journal' | 'privacy' | 'roadmap' | 'support'
+  page: 'first-edition-terms' | 'get' | 'home' | 'journal' | 'privacy' | 'roadmap' | 'support'
 }>
 
 export function SiteShell({ children, page }: SiteShellProps) {
@@ -48,6 +48,7 @@ export function SiteShell({ children, page }: SiteShellProps) {
                 <p>Help</p>
                 <a aria-current={page === 'support' ? 'page' : undefined} href={sitePath('support/')} onClick={closeMobileNavigation}>Support</a>
                 <a aria-current={page === 'privacy' ? 'page' : undefined} href={sitePath('privacy/')} onClick={closeMobileNavigation}>Privacy</a>
+                <a aria-current={page === 'first-edition-terms' ? 'page' : undefined} href={sitePath('first-edition/terms/')} onClick={closeMobileNavigation}>First Edition Terms</a>
               </div>
               <a
                 className="mobile-nav__cta press-surface press-surface--raised"
@@ -86,6 +87,7 @@ function SiteFooter({ page }: Readonly<{ page: SiteShellProps['page'] }>) {
             <p>Help</p>
             <a aria-current={page === 'support' ? 'page' : undefined} href={sitePath('support/')}>Support</a>
             <a aria-current={page === 'privacy' ? 'page' : undefined} href={sitePath('privacy/')}>Privacy</a>
+            <a aria-current={page === 'first-edition-terms' ? 'page' : undefined} href={sitePath('first-edition/terms/')}>First Edition Terms</a>
           </nav>
         </div>
         <p className="site-footer__note">Made independently.<br />Shaped by real use.</p>

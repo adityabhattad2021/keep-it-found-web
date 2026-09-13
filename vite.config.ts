@@ -14,6 +14,7 @@ export default defineConfig(({ isSsrBuild }) => ({
     : {
         rollupOptions: {
           input: {
+            firstEditionTerms: resolve(import.meta.dirname, 'first-edition/terms/index.html'),
             get: resolve(import.meta.dirname, 'get/index.html'),
             home: resolve(import.meta.dirname, 'index.html'),
             journal: resolve(import.meta.dirname, 'journal/index.html'),

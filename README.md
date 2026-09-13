@@ -1,7 +1,7 @@
 # Found website
 
 The public storefront for Found. It contains the static home, roadmap, privacy,
-and support pages. Roadmap voting is its only server-backed feature and lives in
+First Edition terms, and support pages. Roadmap voting is its only server-backed feature and lives in
 this repository under `functions/`.
 
 ```sh

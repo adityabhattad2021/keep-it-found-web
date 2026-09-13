@@ -505,7 +505,7 @@ a.platform-action:focus-visible {
   padding-left: 20px;
 }
 
-.privacy-summary {
+.document-summary {
   padding: 0 !important;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -513,17 +513,17 @@ a.platform-action:focus-visible {
   list-style: none;
 }
 
-.privacy-summary li {
+.document-summary li {
   padding: 18px;
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
 }
 
-.privacy-summary li:nth-child(even) {
+.document-summary li:nth-child(even) {
   border-right: 0;
 }
 
-.privacy-summary strong {
+.document-summary strong {
   display: block;
   color: var(--text);
 }
@@ -788,11 +788,11 @@ a.platform-action:focus-visible {
     border-right: 0;
   }
 
-  .privacy-summary {
+  .document-summary {
     grid-template-columns: 1fr;
   }
 
-  .privacy-summary li {
+  .document-summary li {
     border-right: 0;
   }
 
