@@ -33,13 +33,13 @@ export function RoadmapPage() {
         <header className="roadmap-hero page-hero content-width">
           <div className="roadmap-hero__copy">
             <p className="eyebrow">PUBLIC ROADMAP</p>
-            <h1>What works now. What gets better next.</h1>
-            <p className="page-hero__lede">Found 1.0 is the private library. The current work makes retrieval faster. Your picks help decide what should follow.</p>
+            <h1>What Found has become. Where I am taking it next.</h1>
+            <p className="page-hero__lede">Found now keeps the source, finds it by words or meaning, and brings it back where I need it. Next I am taking that same library across devices, deeper into iPhone, and into the tools I trust.</p>
           </div>
           <nav className="roadmap-hero__guide" aria-label="Roadmap overview">
-            <a href="#shipped"><span>01 · SHIPPED</span><strong>Use Found today</strong></a>
-            <a href="#now"><span>02 · NOW</span><strong>See the current focus</strong></a>
-            <a href="#next"><span>03 · YOUR SAY</span><strong>Choose two directions</strong></a>
+            <a href="#shipped"><span>01 · COMPLETE</span><strong>See what now works</strong></a>
+            <a href="#now"><span>02 · ALWAYS</span><strong>Follow the polish</strong></a>
+            <a href="#next"><span>03 · NEXT</span><strong>Help set the order</strong></a>
           </nav>
         </header>
 
@@ -53,7 +53,7 @@ export function RoadmapPage() {
           <div className="content-width">
             <header className="roadmap-section-heading">
               <p className="eyebrow">WHERE THINGS STAND</p>
-              <h2 id="present-title">A useful foundation, with one clear focus.</h2>
+              <h2 id="present-title">What is complete. What never stops.</h2>
             </header>
             <div className="roadmap-present__grid">
               {presentItems.map(({ anchorId, item, status }) => (
@@ -67,9 +67,9 @@ export function RoadmapPage() {
           <div className="content-width">
             <header className="roadmap-next__header">
               <div>
-                <p className="eyebrow">HELP SET THE ORDER</p>
-                <h2 id="next-title">What should Found tackle next?</h2>
-                <p>Choose the two directions that would remove the most friction from your day. Picks guide priority, not promise dates.</p>
+                <p className="eyebrow">COMMITTED NEXT</p>
+                <h2 id="next-title">Which part should I build first?</h2>
+                <p>I am building all three. Choose the two that would make the biggest difference in your day.</p>
               </div>
               <RoadmapPickMeter pickedCount={pickedFeatureIds.length} />
             </header>
@@ -95,7 +95,7 @@ export function RoadmapPage() {
           <div className="content-width roadmap-feedback-callout__layout">
             <div>
               <p className="eyebrow">YOUR CONTEXT MATTERS</p>
-              <h2 id="feedback-title">A pick tells me what. A real example tells me why.</h2>
+              <h2 id="feedback-title">A pick tells me where. Your story tells me why.</h2>
             </div>
             <p>After choosing a direction, you can share the moment when it would help. You can change your picks whenever your priorities change.</p>
           </div>
@@ -114,7 +114,7 @@ function RoadmapStatusCard({ anchorId, item, status }: Readonly<{
     <article className={`roadmap-status-card roadmap-status-card--${status}`} id={anchorId}>
       <div className="roadmap-status-card__label">
         <span>{roadmapStatusLabels[status]}</span>
-        <span>{status === 'shipped' ? 'AVAILABLE TODAY' : 'IN PROGRESS'}</span>
+        <span>{status === 'shipped' ? 'AVAILABLE TODAY' : 'IN EVERY RELEASE'}</span>
       </div>
       <h3>{item.title}</h3>
       <p>{item.description}</p>

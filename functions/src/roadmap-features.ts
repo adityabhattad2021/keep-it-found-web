@@ -1,13 +1,10 @@
-export const roadmapRoundId = 'reuse-v2'
+export const roadmapRoundId = 'found-everywhere-v2'
 export const roadmapPickLimit = 2
 
 export const votableRoadmapFeatureIds = [
-  'found-outside-found',
-  'reusable-kits',
-  'understand-every-item',
-  'active-library',
-  'continuity-across-devices',
-  'workflow-intelligence',
+  'found-across-devices',
+  'deeper-iphone-intelligence',
+  'trusted-ai-tools',
 ] as const
 
 export type VotableRoadmapFeatureId = (typeof votableRoadmapFeatureIds)[number]

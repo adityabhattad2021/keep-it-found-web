@@ -17,6 +17,6 @@ test('website and backend expose the same roadmap voting contract', () => {
   assert.equal(websitePickLimit, backendPickLimit)
   assert.equal(websiteRoundId, backendRoundId)
   assert.equal(websitePickLimit, 2)
-  assert.equal(websiteRoundId, 'reuse-v2')
+  assert.equal(websiteRoundId, 'found-everywhere-v2')
   assert.equal(new Set(websiteFeatureIds).size, websiteFeatureIds.length)
 })

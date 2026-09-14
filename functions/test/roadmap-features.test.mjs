@@ -13,7 +13,7 @@ import {
 } from '../lib/roadmap-features.js'
 
 test('the active roadmap round allows exactly two picks per identity', () => {
-  assert.equal(roadmapRoundId, 'reuse-v2')
+  assert.equal(roadmapRoundId, 'found-everywhere-v2')
   assert.equal(roadmapPickLimit, 2)
 })
 

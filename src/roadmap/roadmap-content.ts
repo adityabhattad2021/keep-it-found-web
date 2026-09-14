@@ -17,91 +17,84 @@ export type RoadmapSection = Readonly<{
   items: readonly RoadmapItem[]
 }>
 
-export const roadmapRoundId = 'reuse-v2'
+export const roadmapRoundId = 'found-everywhere-v2'
 export const roadmapPickLimit = 2
 
 export const roadmapSections: readonly RoadmapSection[] = [
   {
     status: 'shipped',
-    title: 'The trusted foundation',
-    description: 'The local library available in Found today.',
+    title: 'Completed',
+    description: 'The pieces of Found that are ready to use.',
     items: [
       {
         id: 'trusted-foundation',
-        title: 'Found 1.0',
-        description: 'Capture notes, links, images, PDFs, CSVs, reminders, and ongoing collections. Search locally, share originals, and create portable backups.',
-        why: 'Reuse starts with a dependable source of truth. The first release proves Found can safely keep different kinds of material without requiring an account or flattening every item into a note.',
+        title: 'A library I can trust',
+        description: 'Keep notes, links, images, PDFs, CSVs, reminders, folders, and threads without an account. Search locally by words, with optional Search by meaning, then share originals or create a portable backup.',
+        why: 'Found needs to keep the source safe before it can make anything else feel effortless.',
+      },
+      {
+        id: 'ready-to-use-results',
+        title: 'The result is ready to use',
+        description: 'Copy the text, open the link, return to the right source, or share the original directly from search.',
+        why: 'Finding something is only useful when the next step is already close.',
+      },
+      {
+        id: 'found-outside-found',
+        title: 'Found outside Found',
+        description: 'On iPhone, reach the library through Find with Found, Found Keyboard, Spotlight, Siri, and Shortcuts.',
+        why: 'Something already saved should return without forcing me to abandon what I am doing.',
+      },
+      {
+        id: 'searchable-image-text',
+        title: 'Words inside images can be found',
+        description: 'On iPhone, text inside supported saved images becomes searchable and still leads back to the original image.',
+        why: 'An important detail should not disappear just because I saved it as a picture.',
       },
     ],
   },
   {
     status: 'wip',
-    title: 'Reuse first',
-    description: 'The current focus is reducing the time between remembering something and using it.',
+    title: 'Always improving',
+    description: 'The work that belongs in every Found release.',
     items: [
       {
-        id: 'reuse-first',
-        title: 'Faster retrieval and action',
-        description: 'Improve capture entry points, result quality, source navigation, copy, open, and share flows across iPhone and Android.',
-        why: 'Found earns a daily place when retrieving a useful detail or original takes seconds and the next action is already there.',
+        id: 'relentless-polish',
+        title: 'Make every handoff feel obvious',
+        description: 'I will keep improving capture, search, reading, recovery, accessibility, motion, and speed until Found feels quiet and dependable in daily use.',
+        why: 'Polish is not what happens after the important work. It is what makes the important work trustworthy.',
       },
     ],
   },
   {
     status: 'todo',
-    title: 'What should earn priority',
-    description: 'Choose the two directions that would save you the most time.',
+    title: 'Committed next',
+    description: 'I am building all three. Choose the two you most want me to bring to life first.',
     items: [
       {
-        category: 'ACCESS',
-        id: 'found-outside-found',
-        title: 'Found outside Found',
-        description: 'Retrieve and use saved material from widgets, shortcuts, share actions, Spotlight, system search, and platform automation.',
-        why: 'The best retrieval flow may not begin inside the app. Useful material should be available where the user is already working.',
-        examples: ['Copy my client reply from Spotlight', 'Open my insurance card from a Lock Screen widget'],
+        category: 'ACROSS DEVICES',
+        id: 'found-across-devices',
+        title: 'Found follows me to my desk',
+        description: 'Save something on iPhone, find it on Mac, and keep working even when the internet disappears. Found for Mac will make that library immediately useful through quick capture, a global shortcut, a menu bar finder, and natural drag, copy, open, and share.',
+        why: 'I should not have to remember which device has something important, or interrupt my work to retrieve it.',
+        examples: ['Save it on my phone and use it at my desk', 'Find something without leaving the window I am in', 'Keep working offline'],
         votable: true,
       },
       {
-        category: 'COLLECTIONS',
-        id: 'reusable-kits',
-        title: 'Reusable kits',
-        description: 'Turn related snippets, files, images, links, and instructions into reusable packs for recurring situations.',
-        why: 'People rarely reuse one isolated item. A client handoff, visa application, trip, or onboarding flow usually needs a small collection used together.',
-        examples: ['Open everything I use for client onboarding', 'Prepare my visa document pack'],
+        category: 'IPHONE',
+        id: 'deeper-iphone-intelligence',
+        title: 'Ask naturally. Get the source.',
+        description: 'Bring Found deeper into Siri and new iPhone intelligence so a half-remembered idea, or something I deliberately ask about on screen, can lead back to what I saved.',
+        why: 'I should be able to remember the meaning and let Found handle the exact words and location.',
+        examples: ['Ask Siri for the note about a decision I half remember', 'Start with what I am looking at and return to the saved source'],
         votable: true,
       },
       {
-        category: 'UNDERSTANDING',
-        id: 'understand-every-item',
-        title: 'Understand every item',
-        description: 'Add OCR, image understanding, richer webpage capture, and structured extraction for documents and tables.',
-        why: 'A screenshot, scan, photo, or long document should be as searchable and reusable as typed text.',
-        votable: true,
-      },
-      {
-        category: 'CONTEXT',
-        id: 'active-library',
-        title: 'An active library',
-        description: 'Bring back expiring documents, unfinished intentions, due reminders, and material connected to the current context.',
-        why: 'Some useful things should return before the user remembers to search, but only through explicit, controllable rules.',
-        examples: ['Remind me before this passport expires', 'Bring this checklist back when I arrive at the airport'],
-        votable: true,
-      },
-      {
-        category: 'CONTINUITY',
-        id: 'continuity-across-devices',
-        title: 'Continuity across devices',
-        description: 'Add end-to-end encrypted sync, version history, desktop access, and browser capture while preserving offline use.',
-        why: 'Recurring infrastructure is worth paying for when it makes a trusted library available everywhere without taking ownership away from its user.',
-        votable: true,
-      },
-      {
-        category: 'INTELLIGENCE',
-        id: 'workflow-intelligence',
-        title: 'Workflow intelligence',
-        description: 'Use the right local, system, or optional cloud intelligence to retrieve sources, fill reusable workflows, and perform confirmed actions.',
-        why: 'Intelligence should remove repeated work and show its sources. It should not exist as a generic chat screen searching for a purpose.',
-        examples: ['Find the latest contract and prepare it to share', 'Fill this form from the details I approved'],
+        category: 'AI TOOLS',
+        id: 'trusted-ai-tools',
+        title: 'Bring my sources to the tools I trust',
+        description: 'Let chosen AI tools search only the Found material I allow and return the real sources behind their work.',
+        why: 'I should not have to paste the same private context repeatedly or hand over my entire library to get useful help.',
+        examples: ['Give my writing tool the notes I selected', 'Let an assistant find a source without giving it everything'],
         votable: true,
       },
     ],
@@ -114,7 +107,7 @@ export const votableRoadmapFeatureIds = roadmapSections
   .map((item) => item.id)
 
 export const roadmapStatusLabels: Readonly<Record<RoadmapStatus, string>> = {
-  shipped: 'SHIPPED',
-  wip: 'NOW',
+  shipped: 'COMPLETE',
+  wip: 'ALWAYS',
   todo: 'NEXT',
 }
