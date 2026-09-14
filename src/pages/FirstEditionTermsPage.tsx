@@ -8,7 +8,7 @@ const termsLinks = [
   ['purchase', 'The purchase'],
   ['included', 'Included today'],
   ['personalization', 'Personalization'],
-  ['everywhere', 'Found Everywhere'],
+  ['future', 'Future additions'],
   ['restore', 'Restore and refunds'],
   ['changes', 'Availability'],
   ['contact', 'Contact'],
@@ -21,7 +21,7 @@ export function FirstEditionTermsPage() {
         <header className="document-hero page-hero content-width">
           <p className="eyebrow">FOUND / FIRST EDITION</p>
           <h1>A small purchase with a clear promise.</h1>
-          <p className="page-hero__lede">These terms explain what First Edition includes now, what remains local to your device, and how its future Found Everywhere benefit will work.</p>
+          <p className="page-hero__lede">These terms explain the permanent benefits included with First Edition and how purchase ownership and local personalization work.</p>
           <p className="document-meta">Effective September 13, 2026</p>
         </header>
 
@@ -32,8 +32,7 @@ export function FirstEditionTermsPage() {
               <ul className="document-summary">
                 <li><strong>One payment.</strong> First Edition is a one-time purchase, not a subscription.</li>
                 <li><strong>Something yours today.</strong> It immediately unlocks a member page, personal bookplate, and two alternate icons.</li>
-                <li><strong>A place in what comes next.</strong> It includes twelve months of Found Everywhere when that service launches.</li>
-                <li><strong>No automatic renewal.</strong> The future twelve months begin only when you choose and do not turn into a paid renewal.</li>
+                <li><strong>A complete purchase.</strong> No unreleased product, service, subscription, platform, discount, or launch date is included.</li>
               </ul>
             </TermsSection>
 
@@ -52,11 +51,9 @@ export function FirstEditionTermsPage() {
               <p>Deleting Found, replacing your device, or restoring the device without this local app data can remove the bookplate and reset the selected icon. Restoring the purchase restores First Edition ownership, but it does not recreate personalization that never left the original device.</p>
             </TermsSection>
 
-            <TermsSection id="everywhere" title="4. The Found Everywhere benefit">
-              <p>Found Everywhere is a planned service for secure web access and Found-operated connections when your Apple devices are not nearby. It is not available today, and no launch date has been announced.</p>
-              <p>A valid First Edition purchase includes one twelve-month period of Found Everywhere when the service launches. Those twelve months do not begin on the First Edition purchase date. You will choose when to activate them after launch.</p>
-              <p>Activation will not create an automatically renewing subscription. There will be no automatic charge when the included period ends. Any continued paid service will require a separate, clear choice from you.</p>
-              <p>The final name, features, supported regions, and technical requirements of Found Everywhere may evolve while it is being built. If Found is discontinued before this benefit can be delivered, contact us using the address below. Apple controls App Store refund decisions, and nothing here limits rights that applicable law gives you.</p>
+            <TermsSection id="future" title="4. Future additions">
+              <p>Found may add new First Edition benefits in future updates. If a benefit is added to the existing First Edition entitlement, owners with a valid purchase will receive it without buying First Edition again.</p>
+              <p>No unreleased feature, product, service, subscription, platform, integration, discount, monetary value, or launch date is included in this purchase. Purchase First Edition based only on the benefits identified as available today.</p>
             </TermsSection>
 
             <TermsSection id="restore" title="5. Restore, refunds, and revocation">

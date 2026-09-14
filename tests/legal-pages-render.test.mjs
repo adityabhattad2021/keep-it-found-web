@@ -26,8 +26,8 @@ test('privacy and First Edition terms describe the implemented purchase contract
 
   assert.match(terms, /one-time non-consumable purchase/)
   assert.match(terms, /immediately unlocks the First Edition member page/)
-  assert.match(terms, /includes one twelve-month period of Found Everywhere/)
-  assert.match(terms, /will not create an automatically renewing subscription/)
-  assert.match(terms, /Apple controls App Store refund decisions/)
+  assert.match(terms, /No unreleased feature, product, service, subscription/)
+  assert.match(terms, /Purchase First Edition based only on the benefits identified as available today/)
+  assert.doesNotMatch(terms, /Found Everywhere|twelve-month|twelve months|first year/)
   assert.match(terms, /href="\/privacy\/"/)
 })
