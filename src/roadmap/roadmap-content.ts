@@ -1,4 +1,12 @@
-export type RoadmapStatus = 'shipped' | 'wip' | 'todo'
+/**
+ * The roadmap's words. Every claim about what Found does today stays within
+ * docs/iphone-release-claim-ledger.md; everything else is an outcome, never a date.
+ *
+ * The votable ids, the pick limit and the round id are a contract with
+ * functions/src/roadmap-features.ts. Change their copy freely, never their ids.
+ */
+
+export type RoadmapStatus = 'shipped' | 'wip' | 'todo' | 'later'
 
 export type RoadmapItem = Readonly<{
   category?: string
@@ -6,7 +14,12 @@ export type RoadmapItem = Readonly<{
   title: string
   description: string
   why: string
-  examples?: readonly string[]
+  /** The 1.1 feature a votable direction builds on, named as on the page above it. */
+  buildsOn?: string
+  /** The lowest iOS a shipped feature needs, named whenever the feature is. */
+  floor?: string
+  /** Keys shown beside an item, for the Mac. */
+  keys?: readonly string[]
   votable?: boolean
 }>
 
@@ -17,84 +30,175 @@ export type RoadmapSection = Readonly<{
   items: readonly RoadmapItem[]
 }>
 
-export const roadmapRoundId = 'found-everywhere-v2'
+export const roadmapRoundId = 'iphone-first-v3'
 export const roadmapPickLimit = 2
 
+/** The release on the App Store now. */
+export const currentRelease = {
+  name: 'Found 1.1',
+  facts: [
+    { label: 'For', value: 'iPhone' },
+    { label: 'Requires', value: 'iOS 16.4 or later' },
+    { label: 'Price', value: 'Free' },
+    { label: 'Account', value: 'None' },
+  ],
+} as const
+
+/** What the rest of Found does, the ground 1.1 stands on. */
 export const roadmapSections: readonly RoadmapSection[] = [
   {
     status: 'shipped',
-    title: 'Completed',
-    description: 'The pieces of Found that are ready to use.',
+    title: 'New in 1.1',
+    description: 'The first Siri, Shortcuts and on-device intelligence chapter, on the App Store now.',
     items: [
       {
-        id: 'trusted-foundation',
-        title: 'A library I can trust',
-        description: 'Keep notes, links, images, PDFs, CSVs, reminders, folders, and threads without an account. Search locally by words, with optional Search by meaning, then share originals or create a portable backup.',
-        why: 'Found needs to keep the source safe before it can make anything else feel effortless.',
+        id: 'ask-found',
+        title: 'Ask Found with Siri',
+        description: 'Say “Ask Found”, then ask your question. Siri speaks the passage you saved and names where it came from, with a card to open or send it.',
+        why: 'Always a passage you saved, never a made-up answer. Turn on Siri & Spotlight in Found first.',
+        floor: 'iOS 26',
       },
       {
-        id: 'ready-to-use-results',
-        title: 'The result is ready to use',
-        description: 'Copy the text, open the link, return to the right source, or share the original directly from search.',
-        why: 'Finding something is only useful when the next step is already close.',
+        id: 'whats-inside',
+        title: 'What’s Inside',
+        description: 'Lifts the phone numbers, emails, addresses, amounts and dates out of an item, and brings a date back in time when you tap Bring back.',
+        why: 'With Apple Intelligence it also suggests a name and a place to keep it. Nothing changes until you tap.',
+        floor: 'iOS 26',
       },
       {
-        id: 'found-outside-found',
-        title: 'Found outside Found',
-        description: 'On iPhone, reach the library through Find with Found, Found Keyboard, Spotlight, Siri, and Shortcuts.',
-        why: 'Something already saved should return without forcing me to abandon what I am doing.',
+        id: 'find-from-context',
+        title: 'Find From Context',
+        description: 'A Shortcuts action that takes a screenshot or text from the step before it and returns the matching item with its passage.',
+        why: 'Found reads only what the shortcut hands it. It never looks at the screen itself.',
+        floor: 'iOS 26',
       },
       {
-        id: 'searchable-image-text',
-        title: 'Words inside images can be found',
-        description: 'On iPhone, text inside supported saved images becomes searchable and still leads back to the original image.',
-        why: 'An important detail should not disappear just because I saved it as a picture.',
+        id: 'keep-what-you-copied',
+        title: 'Keep what you copied',
+        description: 'Home offers to keep the text, link or image you just copied. One tap on Keep, and it is saved.',
+        why: 'Found reads your clipboard only when you tap Keep.',
+        floor: 'iOS 16.4',
+      },
+      {
+        id: 'controls',
+        title: 'Control Center and Lock Screen',
+        description: 'Two controls you can add: Save Clipboard to Found keeps what you copied, and Find in Found opens Find.',
+        why: 'Both open Found, so nothing happens out of sight.',
+        floor: 'iOS 18',
+      },
+      {
+        id: 'keep-with-siri',
+        title: 'Keep and organise with Siri',
+        description: '“Keep this in Found”, “Add this to Found”, and Shortcuts actions that file, rename and set reminders. A Focus can bring a folder to the top of Home.',
+        why: 'Siri confirms at once, and the change joins your library the next time Found opens.',
+        floor: 'iOS 27',
+      },
+      {
+        id: 'reminders-on-anything',
+        title: 'A reminder on anything',
+        description: 'Any saved note, link, photo or file can carry a reminder. Due ones wait on Home under Needs you.',
+        why: 'Local notifications only; nothing is scheduled on a server.',
+        floor: 'iOS 16.4',
+      },
+      {
+        id: 'tidy-library',
+        title: 'Tidy Library',
+        description: 'Suggests names for things saved as IMG_4812 and a place for loose ones. Each applies only on tap, with Undo.',
+        why: 'Nothing is renamed or moved until you tap.',
+        floor: 'iOS 26 with Apple Intelligence',
       },
     ],
   },
   {
     status: 'wip',
-    title: 'Always improving',
-    description: 'The work that belongs in every Found release.',
+    title: 'In every release',
+    description: 'The work that never ships once.',
     items: [
       {
         id: 'relentless-polish',
         title: 'Make every handoff feel obvious',
-        description: 'I will keep improving capture, search, reading, recovery, accessibility, motion, and speed until Found feels quiet and dependable in daily use.',
-        why: 'Polish is not what happens after the important work. It is what makes the important work trustworthy.',
+        description: 'Capture, search, reading, recovery, accessibility, motion and speed, improved until Found feels quiet and dependable every day.',
+        why: 'Polish is what makes the important work trustworthy.',
+      },
+    ],
+  },
+  {
+    status: 'later',
+    title: 'Being built',
+    description: 'Each is built as its own work, on the same rules as today: your library stays yours, and nothing reaches it without your say.',
+    items: [
+      {
+        category: 'MAC',
+        id: 'found-across-devices',
+        title: 'Found on your Mac',
+        description: 'A Found of its own for the Mac. Your library a keystroke away while you work: find it, then paste the exact line you need.',
+        why: 'Something you saved on your phone should be there at your desk without a second thought.',
+        keys: ['⌥', 'Space'],
+      },
+      {
+        category: 'ICLOUD',
+        id: 'library-on-every-device',
+        title: 'Every device, your own iCloud',
+        description: 'The same library on each of your devices, carried by your own iCloud. Still no Found account and no Found server.',
+        why: 'You should never have to remember which device has the thing you need.',
+      },
+      {
+        category: 'AI APPS',
+        id: 'trusted-ai-tools',
+        title: 'The AI apps you choose',
+        description: 'Let an AI app you pick find things in your library, only after you allow it. It can read what isn’t Private, and never change or remove anything.',
+        why: 'Your own context, without pasting it again or handing over the whole library.',
       },
     ],
   },
   {
     status: 'todo',
-    title: 'Committed next',
-    description: 'I am building all three. Choose the two you most want me to bring to life first.',
+    title: 'Where the iPhone goes deeper',
+    description: 'Each of these has a first version in Found 1.1. Choose the two that would change your day the most, and help set the order.',
     items: [
       {
-        category: 'ACROSS DEVICES',
-        id: 'found-across-devices',
-        title: 'Found follows me to my desk',
-        description: 'Save something on iPhone, find it on Mac, and keep working even when the internet disappears. Found for Mac will make that library immediately useful through quick capture, a global shortcut, a menu bar finder, and natural drag, copy, open, and share.',
-        why: 'I should not have to remember which device has something important, or interrupt my work to retrieve it.',
-        examples: ['Save it on my phone and use it at my desk', 'Find something without leaving the window I am in', 'Keep working offline'],
+        category: 'SIRI',
+        id: 'siri-knows-found',
+        title: 'Siri that knows your library',
+        buildsOn: 'Ask Found with Siri',
+        description: 'Fewer steps between the question and the answer: ask in one sentence, wherever you already talk to Siri. Still the saved passage, never a made-up answer.',
+        why: 'The fewer words between a question and its answer, the more often you ask.',
         votable: true,
       },
       {
-        category: 'IPHONE',
-        id: 'deeper-iphone-intelligence',
-        title: 'Ask naturally. Get the source.',
-        description: 'Bring Found deeper into Siri and new iPhone intelligence so a half-remembered idea, or something I deliberately ask about on screen, can lead back to what I saved.',
-        why: 'I should be able to remember the meaning and let Found handle the exact words and location.',
-        examples: ['Ask Siri for the note about a decision I half remember', 'Start with what I am looking at and return to the saved source'],
+        category: 'THE SCREEN',
+        id: 'start-from-context',
+        title: 'Start from what’s in front of you',
+        buildsOn: 'Find with Found and Find From Context',
+        description: 'Begin from the camera, a button, or what is already on screen, and land on the saved source with the passage that answers it. Only when you ask.',
+        why: 'The need usually shows up somewhere else. Found should meet it there.',
         votable: true,
       },
       {
-        category: 'AI TOOLS',
-        id: 'trusted-ai-tools',
-        title: 'Bring my sources to the tools I trust',
-        description: 'Let chosen AI tools search only the Found material I allow and return the real sources behind their work.',
-        why: 'I should not have to paste the same private context repeatedly or hand over my entire library to get useful help.',
-        examples: ['Give my writing tool the notes I selected', 'Let an assistant find a source without giving it everything'],
+        category: 'CAPTURE',
+        id: 'keep-from-anywhere',
+        title: 'Keep it from anywhere',
+        buildsOn: 'Keep what you copied, the controls, and Keep with Siri',
+        description: 'Fewer steps between noticing something and keeping it: from more places, on more iPhones, without leaving what you are doing.',
+        why: 'Saving something should cost less than losing it.',
+        votable: true,
+      },
+      {
+        category: 'UNDERSTANDING',
+        id: 'found-reads-what-you-saved',
+        title: 'Found reads more of what you saved',
+        buildsOn: 'What’s Inside',
+        description: 'Whole long documents, not only their opening pages. The contents of documents, spreadsheets and presentations from other apps, not only their names. Scanned pages, too.',
+        why: 'The useful part of a saved thing is often one line inside it.',
+        votable: true,
+      },
+      {
+        category: 'REUSE',
+        id: 'value-one-tap-away',
+        title: 'The value, one tap away',
+        buildsOn: 'The Found Keyboard',
+        description: 'The keyboard offers the saved value a field is asking for, and the things you send every week sit one tap from the Home Screen.',
+        why: 'Reuse should not need a search.',
         votable: true,
       },
     ],
@@ -107,7 +211,8 @@ export const votableRoadmapFeatureIds = roadmapSections
   .map((item) => item.id)
 
 export const roadmapStatusLabels: Readonly<Record<RoadmapStatus, string>> = {
-  shipped: 'COMPLETE',
-  wip: 'ALWAYS',
-  todo: 'NEXT',
+  shipped: 'New in 1.1',
+  wip: 'In every release',
+  todo: 'Your vote',
+  later: 'In development',
 }

@@ -13,11 +13,11 @@ pick set and applies every add, removal, or replacement in one transaction. Remo
 deletes its optional response.
 
 Firestore keeps each voting round under `roadmapRounds/{roundId}` so a new roadmap does not reuse
-identities, counts, or feedback from an older set of choices. The active `reuse-v2` round contains:
+identities, counts, or feedback from an older set of choices. The active `iphone-first-v3` round contains:
 
-- `roadmapRounds/reuse-v2/features/{featureId}` stores the aggregate count.
-- `roadmapRounds/reuse-v2/voters/{anonymousUid}` stores at most two selected feature identifiers.
-- `roadmapRounds/reuse-v2/feedback/{featureId}_{anonymousUid}` stores optional private context.
+- `roadmapRounds/iphone-first-v3/features/{featureId}` stores the aggregate count.
+- `roadmapRounds/iphone-first-v3/voters/{anonymousUid}` stores at most two selected feature identifiers.
+- `roadmapRounds/iphone-first-v3/feedback/{featureId}_{anonymousUid}` stores optional private context.
 
 ## Firebase console setup
 
