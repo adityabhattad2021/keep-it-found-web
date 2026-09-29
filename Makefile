@@ -30,4 +30,4 @@ check:
 
 backend-deploy: check
 	@test -n "$(FIREBASE_PROJECT_ID)" || (echo "FIREBASE_PROJECT_ID is required" && exit 1)
-	firebase deploy --only functions:roadmap,firestore:rules --project "$(FIREBASE_PROJECT_ID)"
+	node_modules/.bin/firebase deploy --only functions:roadmap,firestore:rules --project "$(FIREBASE_PROJECT_ID)"
