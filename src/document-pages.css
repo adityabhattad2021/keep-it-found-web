@@ -1,0 +1,19 @@
+/* Support answers grouped by topic. */
+.faq-group + .faq-group {
+  margin-top: 56px;
+}
+
+.faq-group__title {
+  display: flex;
+  margin-bottom: 14px;
+}
+
+.faq-list details a {
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+/* A paragraph that follows a list inside a policy or terms section. */
+.document-content ul + p {
+  margin-top: 14px;
+}

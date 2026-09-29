@@ -2,9 +2,11 @@ import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'node:path'
 
+import { appStoreId, appStoreUrl, minimumIosVersion } from './src/app-store.ts'
+
 export default defineConfig(({ isSsrBuild }) => ({
   base: process.env.VITE_BASE_PATH ?? '/',
-  plugins: [criticalFontPreloads(), react(), journalArticleRoutes()],
+  plugins: [criticalFontPreloads(), appStoreMetadata(), react(), journalArticleRoutes()],
   build: isSsrBuild
     ? {
         rollupOptions: {
@@ -52,6 +54,69 @@ function fontPreload(href: string) {
       crossorigin: '',
     },
     injectTo: 'head-prepend' as const,
+  }
+}
+
+/**
+ * Every page carries Safari's App Store banner; the home page also carries the
+ * structured data that names the App Store listing. Both read one source.
+ */
+function appStoreMetadata(): Plugin {
+  const homeDocument = resolve(import.meta.dirname, 'index.html')
+  return {
+    name: 'app-store-metadata',
+    transformIndexHtml: {
+      order: 'pre',
+      handler(_html, context) {
+        const tags = [{
+          tag: 'meta',
+          attrs: { name: 'apple-itunes-app', content: `app-id=${appStoreId}` },
+          injectTo: 'head' as const,
+        }]
+        if (resolve(context.filename) === homeDocument) {
+          tags.push({
+            tag: 'script',
+            attrs: { type: 'application/ld+json' } as never,
+            children: JSON.stringify([softwareApplication(), launchFilm()]).replaceAll('<', '\\u003c'),
+            injectTo: 'head' as const,
+          } as never)
+        }
+        return tags
+      },
+    },
+  }
+}
+
+function softwareApplication() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Found',
+    alternateName: 'Found: Private Library',
+    applicationCategory: 'ProductivityApplication',
+    operatingSystem: `iOS ${minimumIosVersion} or later`,
+    description: 'One private place on your iPhone for notes, links, photos, PDFs and files. Save it once. Ask for what it said, right where the question is, and get the exact thing back.',
+    url: 'https://keep-it-found.app/',
+    downloadUrl: appStoreUrl,
+    installUrl: appStoreUrl,
+    sameAs: [appStoreUrl],
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  }
+}
+
+/** The launch film, recorded in Found: the site's own copy, and the same film on YouTube. */
+function launchFilm() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: 'Found — Save it once. Find it again.',
+    description: 'A two-minute film recorded in Found on iPhone: asking right where the question is, search by meaning, What’s Inside, Siri, privacy, and what comes next.',
+    thumbnailUrl: 'https://keep-it-found.app/media/found-film.jpg',
+    contentUrl: 'https://keep-it-found.app/media/found-film.mp4',
+    embedUrl: 'https://www.youtube.com/embed/qaoqS_fjirM',
+    uploadDate: '2026-09-29',
+    duration: 'PT1M59S',
   }
 }
 

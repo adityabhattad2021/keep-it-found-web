@@ -1,228 +1,130 @@
-import { useState } from 'react'
-
-import { PlatformIcon } from '../components/PlatformIcon'
+import { AppStoreAction } from '../components/AppStoreAction'
 import { SiteShell } from '../components/SiteShell'
-import {
-  buildAndroidAccess,
-  buildIosAccess,
-  type AccessAction,
-} from '../features/acquisition/access-model'
-import {
-  buildAcquisitionPlatformUrl,
-  resolveAcquisitionPlatform,
-  type AcquisitionPlatform,
-} from '../features/acquisition/platform'
-import {
-  siteConfig,
-  sitePath,
-  type AndroidRelease,
-  type IosRelease,
-  type PlatformReleases,
-} from '../site-config'
+import { siteConfig, sitePath } from '../site-config'
 
-const selectablePlatforms = ['android', 'ios'] as const
+/**
+ * Get Found: the App Store, then the few switches that bring the library to
+ * wherever the question is. Names and OS floors follow the claim ledger.
+ */
+const setupSteps = [
+  {
+    id: 'siri-spotlight',
+    where: 'In Found · Settings',
+    title: 'Siri & Spotlight',
+    steps: 'Open the menu, choose Settings, then Siri & Spotlight, and turn it on. This one switch lets Find with Found, Siri, Spotlight and Shortcuts reach your library.',
+    note: 'Off until you turn it on. Found keeps an on-device copy of what it can share there, and removes it when you turn this off.',
+  },
+  {
+    id: 'save-to-found',
+    where: 'The Share Sheet, in another app',
+    title: 'Save to Found',
+    steps: 'Tap Share, then Save to Found. If it isn’t in the row of apps, scroll to the end of the row, tap More, and add it. Then choose where it belongs, or just save.',
+    note: 'Takes text, one link, and up to ten photos and ten files at a time.',
+  },
+  {
+    id: 'find-with-found',
+    where: 'The Share Sheet, in another app',
+    title: 'Find with Found',
+    steps: 'Select a question, a link or a screenshot, tap Share, then Find with Found. If it isn’t there, scroll to the end of the actions, tap Edit Actions, and add it.',
+    note: 'Nothing you share to it is saved.',
+  },
+  {
+    id: 'found-keyboard',
+    where: 'The Settings app',
+    title: 'Found Keyboard',
+    steps: 'Go to General, Keyboard, Keyboards, Add New Keyboard, and choose Found. In Found, give a note a shortcut. Then type ; and the shortcut, switch to the Found Keyboard with the globe key, and tap the note.',
+    note: 'The Found Keyboard works without Full Access and has no network access.',
+  },
+  {
+    id: 'search-by-meaning',
+    where: 'In Found · Settings · Search',
+    title: 'Search by meaning',
+    steps: 'Turn on Search by meaning to download its model once. After that, Found can find things you describe in other words, on your iPhone.',
+    note: 'Keyword search works without it.',
+  },
+  {
+    id: 'apple-intelligence',
+    where: 'In Found · Settings · Apple Intelligence',
+    title: 'Apple Intelligence',
+    steps: 'On iOS 26, check that Describe and rephrase on device is on. It is by default where Apple Intelligence is available. Found then writes search phrasings on your iPhone, and What’s Inside can suggest a name and a place for things.',
+    note: 'Needs an iPhone that supports Apple Intelligence. What’s Inside’s details and dates work without it.',
+  },
+  {
+    id: 'controls',
+    where: 'Control Center or the Lock Screen',
+    title: 'Controls',
+    steps: 'On iOS 18, add Save Clipboard to Found and Find in Found as controls, to keep what you copied or open Find in one tap.',
+    note: 'Both open Found. iOS may ask you to allow pasting.',
+  },
+] as const
 
-type GetFoundPageProps = Readonly<{
-  initialPlatform?: AcquisitionPlatform
-  releases?: PlatformReleases
-}>
+const needs = [
+  { term: 'iPhone', detail: `iOS ${siteConfig.app.minimumIosVersion} or later. Found is free, with no account to create.` },
+  { term: 'Siri and Shortcuts', detail: 'Most Shortcuts actions need iOS 17, and Find in Found with Siri iOS 17.4. Asking Siri with “Ask Found” needs iOS 26.' },
+  { term: 'What’s Inside', detail: 'iOS 26. Its details and dates work without Apple Intelligence.' },
+  { term: 'Apple Intelligence', detail: 'Search phrasings and What’s Inside suggestions need iOS 26 on an iPhone that supports Apple Intelligence.' },
+  { term: 'Controls', detail: 'Save Clipboard to Found and Find in Found need iOS 18.' },
+] as const
 
-export function GetFoundPage({
-  initialPlatform,
-  releases = siteConfig.releases,
-}: GetFoundPageProps = {}) {
-  const [platform, setPlatform] = useState<AcquisitionPlatform>(() => (
-    initialPlatform ?? resolveInitialPlatform()
-  ))
-
-  const selectPlatform = (nextPlatform: Exclude<AcquisitionPlatform, 'unknown'>) => {
-    setPlatform(nextPlatform)
-    window.history.replaceState(null, '', buildAcquisitionPlatformUrl(window.location.href, nextPlatform))
-  }
-
+export function GetFoundPage() {
   return (
     <SiteShell page="get">
-      <main className="get-found-page">
-        <header className="get-found-hero page-hero content-width">
-          <p className="eyebrow">CURRENT RELEASES</p>
-          <h1>Get Found.</h1>
-          <p className="page-hero__lede">Choose your device to see what is available today and how to install it.</p>
-        </header>
+      <main className="get-page">
+        <section className="get-hero content-width" aria-labelledby="get-title">
+          <div className="get-hero__copy">
+            <p className="eyebrow">Found for iPhone</p>
+            <h1 id="get-title">Get Found.</h1>
+            <p className="page-hero__lede">Free on the App Store. Nothing to sign up for. Your library stays on your iPhone.</p>
+            <AppStoreAction placement="get" />
+          </div>
+          <figure className="get-hero__qr">
+            <img src={sitePath('brand/app-store-qr.svg')} width="220" height="220" alt="QR code for Found on the App Store" />
+            <figcaption>On a computer? Scan with your iPhone.</figcaption>
+          </figure>
+        </section>
 
-        <section className="access-section" aria-label="Choose your device">
-          <div className="content-width access-section__inner">
-            <header className="access-section__header">
-              <p className="eyebrow">YOUR DEVICE</p>
-              <div className="platform-switch" aria-label="Choose a mobile platform" role="group">
-                {selectablePlatforms.map((option) => (
-                  <button
-                    aria-controls="platform-access"
-                    aria-pressed={platform === option}
-                    key={option}
-                    onClick={() => selectPlatform(option)}
-                    type="button"
-                  >
-                    <PlatformIcon platform={option === 'android' ? 'Android' : 'iOS'} />
-                    {option === 'android' ? 'Android' : 'iPhone'}
-                  </button>
-                ))}
-              </div>
-            </header>
-
-            <div aria-label="Platform access" aria-live="polite" id="platform-access" role="region">
-              {platform === 'android' && <AndroidAccess release={releases.android} />}
-              {platform === 'ios' && <IosAccess release={releases.ios} />}
-              {platform === 'unknown' && (
-                <div className="access-empty">
-                  <p>Select the phone you want to install Found on.</p>
+        <section className="setup content-width" aria-labelledby="setup-title" id="setup">
+          <header className="section-heading">
+            <p className="eyebrow">After you install</p>
+            <h2 id="setup-title">A minute of setup, then Found is there when you ask.</h2>
+            <p>Found works on its own right away. These bring it into other apps, Siri and the keyboard. Most stay off until you turn them on.</p>
+          </header>
+          <ol className="setup-steps">
+            {setupSteps.map((step, index) => (
+              <li className="setup-step" id={step.id} key={step.id}>
+                <span className="setup-step__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                <div className="setup-step__copy">
+                  <p className="setup-step__where">{step.where}</p>
+                  <h3>{step.title}</h3>
+                  <p>{step.steps}</p>
+                  <small>{step.note}</small>
                 </div>
-              )}
-            </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="get-ask content-width" aria-labelledby="ask-siri-title">
+          <div className="get-ask__card">
+            <p className="eyebrow">Ask Siri · iOS 26</p>
+            <h2 id="ask-siri-title">“Ask Found a question.”</h2>
+            <p>Siri asks what you’d like to know. Say it, and Siri answers with the passage you saved and where it came from. It never makes an answer up.</p>
           </div>
         </section>
 
-        <section className="access-trust">
-          <div className="content-width access-trust__inner">
-            <p className="eyebrow">NO FOUND ACCOUNT</p>
-            <p>Testing access is handled by Google Play or TestFlight. Found does not create a separate account or copy your store account into its own system.</p>
-          </div>
+        <section className="needs content-width" aria-labelledby="needs-title">
+          <h2 id="needs-title">What it needs</h2>
+          <dl>
+            {needs.map((need) => (
+              <div key={need.term}>
+                <dt>{need.term}</dt>
+                <dd>{need.detail}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="needs__note">The App Store handles installing, updates and First Edition under Apple’s terms. Found has no account of its own. <a href={sitePath('support/')}>Questions? See Support.</a></p>
         </section>
       </main>
     </SiteShell>
   )
-}
-
-function AndroidAccess({ release }: Readonly<{ release: AndroidRelease }>) {
-  const access = buildAndroidAccess(release)
-
-  return (
-    <div className="access-workflow">
-      <AccessTitle detail="Google Play" platform="Android" status={access.status} title="Found for Android" />
-
-      {access.mode === 'closed-test' && (
-        <>
-          <p className="access-account-note"><strong>Use the same Google account for both steps.</strong> This must also be the account active in Google Play on your phone.</p>
-
-          <ol className="access-steps">
-            <li>
-              <span className="access-step__number" aria-hidden="true">1</span>
-              <div className="access-step__copy">
-                <h4>Join the tester group</h4>
-                <p className="access-step__disclosure">Google uses group membership to grant Play access. Group owners and managers can see your Google account email. Found does not use the group for messages or marketing. After joining, return to this tab.</p>
-              </div>
-              <ExternalAction action={access.groupAction} />
-            </li>
-            <li>
-              <span className="access-step__number" aria-hidden="true">2</span>
-              <div className="access-step__copy">
-                <h4>Continue to Google Play</h4>
-                <p>Choose Become a tester, then install Found from the Play Store. Already joined the group? Start here.</p>
-              </div>
-              <ExternalAction action={access.storeAction} />
-            </li>
-          </ol>
-
-          <details className="access-help">
-            <summary>Seeing &quot;App not available&quot;?</summary>
-            <p>Confirm that Google Groups and Google Play use the same account, check that the group appears under My groups, then wait a few minutes and retry Google Play. Access changes can take time to propagate.</p>
-            <a href={sitePath('support/')}>More troubleshooting</a>
-          </details>
-        </>
-      )}
-
-      {access.mode === 'production' && (
-        <div className="direct-access">
-          <p>Install Found from Google Play. Updates arrive through the Play Store.</p>
-          <ExternalAction action={access.storeAction} />
-        </div>
-      )}
-
-      {access.mode === 'paused' && (
-        <div className="access-unavailable">
-          <div>
-            <strong>Android access is temporarily paused.</strong>
-            <p>There is no waitlist or account to create. This page will change when testing reopens.</p>
-          </div>
-          <span aria-disabled="true">Access paused</span>
-        </div>
-      )}
-    </div>
-  )
-}
-
-function IosAccess({ release }: Readonly<{ release: IosRelease }>) {
-  const access = buildIosAccess(release)
-  const detail = access.mode === 'production' ? 'App Store' : 'TestFlight'
-
-  return (
-    <div className="access-workflow">
-      <AccessTitle detail={detail} platform="iOS" status={access.status} title="Found for iPhone" />
-
-      {access.mode === 'production' && (
-        <div className="direct-access">
-          <p>Install Found from the App Store. Updates arrive through the App Store.</p>
-          <ExternalAction action={access.storeAction} />
-        </div>
-      )}
-
-      {access.mode === 'testflight' && (
-        <div className="direct-access">
-          <p>TestFlight installs and updates the Found test build on your iPhone.</p>
-          <ExternalAction action={access.testFlightAction} />
-        </div>
-      )}
-
-      {access.mode === 'reviewing' && (
-        <div className="access-unavailable">
-          <div>
-            <strong>The first external TestFlight build is with Apple.</strong>
-            <p>Public access will open here after Beta App Review. There is no waitlist or account to create.</p>
-          </div>
-          <span aria-disabled="true">TestFlight opening soon</span>
-        </div>
-      )}
-    </div>
-  )
-}
-
-function AccessTitle({ detail, platform, status, title }: Readonly<{
-  detail: string
-  platform: 'Android' | 'iOS'
-  status: string
-  title: string
-}>) {
-  return (
-    <header className="access-workflow__title">
-      <div className="access-workflow__platform"><PlatformIcon platform={platform} /></div>
-      <div>
-        <p>{detail}</p>
-        <h3>{title}</h3>
-      </div>
-      <span className="access-status">{status}</span>
-    </header>
-  )
-}
-
-function ExternalAction({ action }: Readonly<{ action: AccessAction }>) {
-  return (
-    <a
-      aria-label={`${action.label} (opens in a new tab)`}
-      className="access-step__action press-surface press-surface--raised"
-      href={action.href}
-      rel="noreferrer"
-      target="_blank"
-    >
-      {action.label}
-      <span aria-hidden="true">↗</span>
-    </a>
-  )
-}
-
-function resolveInitialPlatform(): AcquisitionPlatform {
-  if (typeof window === 'undefined') return 'unknown'
-
-  return resolveAcquisitionPlatform(window.location.search, {
-    userAgent: window.navigator.userAgent,
-    maxTouchPoints: window.navigator.maxTouchPoints,
-  })
 }

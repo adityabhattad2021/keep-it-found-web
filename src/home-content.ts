@@ -1,77 +1,35 @@
-export type HomeScenario = Readonly<{
-  id: 'client-reply' | 'visa-document' | 'form-detail'
-  need: string
-  source: string
-  format: string
-  title: string
-  body: string
-  memory: string
-  action: string
-  outcome: string
-  context: string
-}>
+/** The home page's lists. Every claim stays within docs/iphone-release-claim-ledger.md. */
 
-export const homeScenarios: readonly HomeScenario[] = [
+/** Where things end up: the pile the film opens on. */
+export const pile = [
+  { count: 14208, label: 'Photos', tilt: -2.5 },
+  { count: 63, label: 'Tabs', tilt: 1.8 },
+  { count: 412, label: 'Notes', tilt: -1.2 },
+  { count: 3912, label: 'Emails', tilt: 2.4 },
+] as const
+
+export const keptKinds = [
+  { kind: 'NOTE', label: 'Notes and lists' },
+  { kind: 'LINK', label: 'Links' },
+  { kind: 'IMG', label: 'Photos' },
+  { kind: 'PDF', label: 'PDFs' },
+  { kind: 'CSV', label: 'CSV tables' },
+  { kind: 'FILE', label: 'Any other file' },
+] as const
+
+type ComingItem = Readonly<{ title: string; body: string }>
+
+export const comingNext: readonly ComingItem[] = [
   {
-    id: 'client-reply',
-    need: 'Reply to a client',
-    source: 'Notes',
-    format: 'TEXT',
-    title: 'Client follow-up',
-    body: 'Thanks for sending this over. I can have a first pass ready by Friday afternoon.',
-    memory: 'reply about the first pass on Friday',
-    action: 'Copy reply',
-    outcome: 'Reply ready to paste',
-    context: 'Saved with Client launch',
+    title: 'Found on your Mac',
+    body: 'Your library at your desk: find what you kept on your iPhone, and use it where you are working.',
   },
   {
-    id: 'visa-document',
-    need: 'Show a visa document',
-    source: 'Files',
-    format: 'PDF / PAGE 4',
-    title: 'Visa checklist.pdf',
-    body: 'Your passport must remain valid for at least six months.',
-    memory: 'passport valid for six months',
-    action: 'Open page 4',
-    outcome: 'Exact page ready to show',
-    context: 'Saved with Visa documents',
+    title: 'Every device, your own iCloud',
+    body: 'The same library on each of your devices, carried by your own iCloud. Still no Found server.',
   },
   {
-    id: 'form-detail',
-    need: 'Fill out a form',
-    source: 'Messages',
-    format: 'DETAIL',
-    title: 'Studio membership',
-    body: 'Member ID: FD-2048-17',
-    memory: 'my studio member number',
-    action: 'Copy member ID',
-    outcome: 'Member ID ready to paste',
-    context: 'Saved with Memberships',
+    title: 'The AI apps you choose',
+    body: 'Let an AI app you pick find things in your library, only after you allow it, and never change or remove anything.',
   },
 ]
-
-export const libraryFormats = [
-  { id: 'text', label: 'Text', mark: 'T', title: 'Reusable replies', detail: 'Copy the useful words without reopening a long note.' },
-  { id: 'image', label: 'Images', mark: 'I', title: 'Reference images', detail: 'Keep the original image ready to preview or share.' },
-  { id: 'link', label: 'Links', mark: 'L', title: 'Useful links', detail: 'Keep the destination and the reason it mattered.' },
-  { id: 'file', label: 'Files', mark: 'F', title: 'PDFs and CSVs', detail: 'Open and share a clean original instead of a flattened copy.' },
-  { id: 'list', label: 'Lists', mark: 'C', title: 'Working lists', detail: 'Keep checklists close to the material they belong with.' },
-] as const
-
-export const everydayUses = [
-  {
-    index: '01',
-    title: 'Client work',
-    body: 'Keep the proposal, call notes, shared links, and reusable follow-up together. Pull up the right piece while the conversation is still happening.',
-  },
-  {
-    index: '02',
-    title: 'Forms and details',
-    body: 'Bring back membership numbers, addresses, Wi-Fi details, and standard replies without remembering which app held them.',
-  },
-  {
-    index: '03',
-    title: 'Travel and documents',
-    body: 'Keep tickets, visa documents, checklists, and reference images in one place, then open the original when someone asks for it.',
-  },
-] as const

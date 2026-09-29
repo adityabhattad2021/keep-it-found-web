@@ -144,7 +144,7 @@ function serializeStructuredData(article, canonicalRoot, canonicalUrl) {
 }
 
 function createSitemap(canonicalRoot, articles) {
-  const staticPaths = ['', 'get/', 'journal/', 'privacy/', 'roadmap/', 'support/']
+  const staticPaths = ['', 'first-edition/terms/', 'get/', 'journal/', 'privacy/', 'roadmap/', 'support/']
   const entries = [
     ...staticPaths.map((path) => ({ url: new URL(path, canonicalRoot).href })),
     ...articles.map((article) => ({
