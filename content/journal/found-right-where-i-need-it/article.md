@@ -60,8 +60,6 @@ I could make this connected experience real on iPhone first, so that is what I c
 
 The Share Sheet, keyboard, Spotlight, Siri, and Shortcuts each let Found support a different part of the same journey. Building deeply around those iPhone patterns made more sense to me than spreading the idea thinly just to keep two feature lists even.
 
-Found's core library still exists on Android in closed testing, but I am not promising matching features or a matching date. If I take this direction further on Android, I want it to begin with the places and patterns that feel natural there.
-
 I would rather be honest about that choice. This release is iPhone-first because depth is the point.
 
 ## I should only have to remember why it mattered

@@ -16,7 +16,7 @@ On a laptop, the experience could feel remarkable. The model was fast enough, th
 
 Phones exposed the harder truth.
 
-The model could consume gigabytes of storage. Downloads failed on real networks. Verification and setup created confusing states. A high-end Pixel could eventually provide acceptable performance, but lower-end devices could not be treated as an afterthought. Keeping a large model available without choking memory was difficult. Most importantly, the engineering effort was growing faster than the value a person received from it.
+The model could consume gigabytes of storage. Downloads failed on real networks. Verification and setup created confusing states. A high-end phone could eventually provide acceptable performance, but lower-end devices could not be treated as an afterthought. Keeping a large model available without choking memory was difficult. Most importantly, the engineering effort was growing faster than the value a person received from it.
 
 The work was not wasted. It taught me what local intelligence must earn before it deserves a place in a product:
 
