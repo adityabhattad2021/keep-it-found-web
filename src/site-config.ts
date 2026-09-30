@@ -6,7 +6,7 @@ export const siteConfig = {
   tagline: 'Save it once. Find it by meaning. Use it right here.',
   canonicalUrl: 'https://keep-it-found.app/',
   issueUrl: 'https://github.com/adityabhattad2021/keep-it-found-web/issues/new/choose',
-  supportEmail: 'adityabhattad18@gmail.com',
+  supportEmail: 'hello@keep-it-found.app',
   app: {
     appStoreId,
     appStoreUrl,
